@@ -6,7 +6,7 @@ from typing import Optional, Union, Callable, Any
 def log_stack_trace(
     exception: Optional[Union[Exception, BaseException]] = None, 
     log_level: int = logging.ERROR, 
-    logger: Optional[logging.Logger] = None
+    logger: Optional[Union[logging.Logger, object]] = None
 ) -> str:
     """
     Log a stack trace from an exception or the current stack trace.
@@ -15,7 +15,7 @@ def log_stack_trace(
         exception (Optional[Exception]): The exception to log. 
             If None, logs the current stack trace.
         log_level (int): Logging level (default is logging.ERROR)
-        logger (Optional[logging.Logger]): Custom logger. 
+        logger (Optional[Union[Logger, object]]): Custom logger. 
             If None, uses the root logger.
 
     Returns:
@@ -28,9 +28,9 @@ def log_stack_trace(
     if logger is None:
         logger = logging.getLogger()
 
-    # Validate logger
-    if not isinstance(logger, logging.Logger):
-        raise TypeError("Invalid logger. Must be an instance of logging.Logger")
+    # Check if logger has required logging method
+    if not hasattr(logger, 'log'):
+        raise TypeError("Invalid logger. Must have a 'log' method")
 
     # Get stack trace string
     if exception is not None:
