@@ -9,7 +9,7 @@ def test_find_longest_substring_basic():
 
 def test_find_longest_substring_case_sensitivity():
     """Ensure the function is case-sensitive."""
-    assert find_longest_substring("ABCabcABC") == "abc"
+    assert find_longest_substring("ABCabcABC") == "ABCabc"
     assert find_longest_substring("aAaA") == "aA"
 
 def test_find_longest_substring_edge_cases():
