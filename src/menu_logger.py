@@ -20,14 +20,18 @@ class MenuLogger:
         """
         # Ensure log directory exists if log_file is specified
         if log_file:
-            os.makedirs(os.path.dirname(os.path.abspath(log_file)), exist_ok=True)
+            os.makedirs(os.path.dirname(os.path.abspath(log_file)) or '.', exist_ok=True)
+        
+        # Remove any existing loggers to prevent duplicate logging
+        for handler in logging.root.handlers[:]:
+            logging.root.removeHandler(handler)
         
         # Configure logging
         logging.basicConfig(
             level=logging.INFO,
             format='%(asctime)s - %(levelname)s - %(message)s',
             filename=log_file,
-            filemode='a'  # Append mode to prevent overwriting
+            filemode='w'  # Write mode to start fresh each time
         )
         self.logger = logging.getLogger(__name__)
     
