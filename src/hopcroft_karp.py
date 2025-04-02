@@ -19,6 +19,12 @@ def hopcroft_karp_max_matching(graph: Dict[int, List[int]]) -> Dict[int, Optiona
     if not graph:
         raise ValueError("Input graph cannot be empty")
     
+    # Separate left and right sets
+    left_set = set(graph.keys())
+    right_set = set()
+    for neighbors in graph.values():
+        right_set.update(neighbors)
+    
     # Initialize matching and tracking sets
     match = {}  # Stores the current matching
     dist = {}   # Distance for BFS
@@ -32,8 +38,8 @@ def hopcroft_karp_max_matching(graph: Dict[int, List[int]]) -> Dict[int, Optiona
         """
         queue = []
         
-        # Check vertices in the first set (left side)
-        for u in graph:
+        # Check vertices in the left set
+        for u in left_set:
             if u not in match:
                 dist[u] = 0
                 queue.append(u)
@@ -84,13 +90,13 @@ def hopcroft_karp_max_matching(graph: Dict[int, List[int]]) -> Dict[int, Optiona
     
     # Find maximum matching
     while bfs():
-        for u in graph:
+        for u in left_set:
             if u not in match:
                 dfs(u)
     
     # Convert match to a dict with optional matches
     result = {}
     for u in graph:
-        result[u] = match.get(u)
+        result[u] = match.get(u) if u in left_set else None
     
     return result
