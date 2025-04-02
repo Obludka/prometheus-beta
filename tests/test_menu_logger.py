@@ -6,30 +6,26 @@ from src.menu_logger import MenuLogger
 def test_single_selection_logging(tmp_path):
     """Test logging a single menu selection."""
     log_file = tmp_path / "menu_log.txt"
-    # Explicitly create the file before logging
-    log_file.touch()
     logger = MenuLogger(str(log_file))
     
     # Log a selection
     logger.log_selection("Main Menu", "Option 1")
     
-    # Verify log content
-    with open(log_file, 'r') as f:
+    # Verify log content using standard file read
+    with open(str(log_file), 'r') as f:
         log_content = f.read()
         assert "Menu 'Main Menu' - Selected: Option 1" in log_content
 
 def test_multiple_selections_logging(tmp_path):
     """Test logging multiple menu selections."""
     log_file = tmp_path / "menu_log.txt"
-    # Explicitly create the file before logging
-    log_file.touch()
     logger = MenuLogger(str(log_file))
     
     # Log multiple selections
     logger.log_multiple_selections("Settings Menu", ["Dark Mode", "Notifications"])
     
     # Verify log content
-    with open(log_file, 'r') as f:
+    with open(str(log_file), 'r') as f:
         log_content = f.read()
         assert "Menu 'Settings Menu' - Selections: Dark Mode, Notifications" in log_content
 
@@ -53,8 +49,6 @@ def test_empty_selections_raises_error():
 def test_different_selection_types(tmp_path):
     """Test logging selections of different types."""
     log_file = tmp_path / "menu_log.txt"
-    # Explicitly create the file before logging
-    log_file.touch()
     logger = MenuLogger(str(log_file))
     
     # Log selections of different types
@@ -63,7 +57,7 @@ def test_different_selection_types(tmp_path):
     logger.log_multiple_selections("Mixed Menu", [1, "text", False])
     
     # Verify log content
-    with open(log_file, 'r') as f:
+    with open(str(log_file), 'r') as f:
         log_content = f.read()
         assert "Menu 'Number Menu' - Selected: 42" in log_content
         assert "Menu 'Boolean Menu' - Selected: True" in log_content
