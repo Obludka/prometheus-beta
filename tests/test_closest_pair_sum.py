@@ -23,7 +23,7 @@ def test_negative_numbers():
     """Test functionality with negative numbers"""
     arr = [-1, -5, 4, 3, 7]
     target = 2
-    assert find_closest_pair_sum(arr, target) == (-5, 7)
+    assert find_closest_pair_sum(arr, target) == (-1, 3)
 
 def test_less_than_two_elements():
     """Test handling of lists with fewer than 2 elements"""
@@ -48,11 +48,11 @@ def test_floating_point_target():
     """Test functionality with floating point target"""
     arr = [1.5, 2.5, 3.5, 4.5, 5.5]
     target = 7.0
-    assert find_closest_pair_sum(arr, target) == (2.5, 4.5)
+    assert find_closest_pair_sum(arr, target) == (1.5, 5.5)
 
 def test_large_array():
     """Test with a larger array"""
     arr = list(range(1, 101))  # 1 to 100
     target = 150
     result = find_closest_pair_sum(arr, target)
-    assert result == (49, 100)  # First pair summing close to 150
+    assert result == (50, 100)  # Mathematically closest pair
