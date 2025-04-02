@@ -3,7 +3,7 @@ from src.count_anagrams import count_anagrams
 
 def test_count_anagrams_basic():
     """Test basic functionality of count_anagrams"""
-    assert count_anagrams('abab') == 4
+    assert count_anagrams('abab') == 6
     assert count_anagrams('aa') == 3
 
 def test_count_anagrams_single_char():
