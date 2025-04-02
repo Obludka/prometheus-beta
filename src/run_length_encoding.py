@@ -74,14 +74,22 @@ def run_length_decode(encoded_string):
     decoded = []
     count_str = ''
     
-    for char in encoded_string:
-        if char.isdigit():
-            count_str += char
-        else:
-            if not count_str:
-                raise ValueError(f"Invalid encoded string: {encoded_string}")
-            
-            decoded.append(int(count_str) * char)
-            count_str = ''
+    try:
+        for char in encoded_string:
+            if char.isdigit():
+                count_str += char
+            else:
+                if not count_str:
+                    raise ValueError(f"Invalid encoded string: {encoded_string}")
+                
+                decoded.append(int(count_str) * char)
+                count_str = ''
+        
+        # Ensure entire string was processed
+        if count_str:
+            raise ValueError(f"Invalid encoded string: {encoded_string}")
+        
+        return ''.join(decoded)
     
-    return ''.join(decoded)
+    except ValueError as e:
+        raise ValueError(f"Invalid encoded string: {encoded_string}") from e
