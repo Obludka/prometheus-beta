@@ -7,7 +7,7 @@ def test_basic_conversion():
 
 def test_mixed_case_input():
     """Test conversion when input has mixed case."""
-    assert convert_to_alternating_header_case("PYTHON is AWESOME") == "Python is awesome"
+    assert convert_to_alternating_header_case("PYTHON is AWESOME") == "Python is Awesome"
 
 def test_empty_string():
     """Test conversion of an empty string."""
@@ -19,7 +19,7 @@ def test_single_word():
 
 def test_multiple_words():
     """Test conversion of multiple words."""
-    assert convert_to_alternating_header_case("this is a test string") == "This is a Test string"
+    assert convert_to_alternating_header_case("this is a test string") == "This is A test String"
 
 def test_input_type_error():
     """Test that a TypeError is raised for non-string input."""
