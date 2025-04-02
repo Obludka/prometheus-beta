@@ -6,6 +6,8 @@ from src.menu_logger import MenuLogger
 def test_single_selection_logging(tmp_path):
     """Test logging a single menu selection."""
     log_file = tmp_path / "menu_log.txt"
+    # Explicitly create the file before logging
+    log_file.touch()
     logger = MenuLogger(str(log_file))
     
     # Log a selection
@@ -19,6 +21,8 @@ def test_single_selection_logging(tmp_path):
 def test_multiple_selections_logging(tmp_path):
     """Test logging multiple menu selections."""
     log_file = tmp_path / "menu_log.txt"
+    # Explicitly create the file before logging
+    log_file.touch()
     logger = MenuLogger(str(log_file))
     
     # Log multiple selections
@@ -49,6 +53,8 @@ def test_empty_selections_raises_error():
 def test_different_selection_types(tmp_path):
     """Test logging selections of different types."""
     log_file = tmp_path / "menu_log.txt"
+    # Explicitly create the file before logging
+    log_file.touch()
     logger = MenuLogger(str(log_file))
     
     # Log selections of different types
