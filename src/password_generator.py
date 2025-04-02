@@ -30,6 +30,11 @@ def generate_password(length):
     # Combine all character sets
     all_characters = lowercase + uppercase + digits + punctuation
 
+    # Special handling for very short passwords
+    if length < 4:
+        password = random.choices(all_characters, k=length)
+        return ''.join(password)
+
     # Generate password ensuring at least one character from each set
     password = [
         random.choice(lowercase),
