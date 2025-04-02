@@ -30,10 +30,10 @@ def count_anagrams(s: str) -> int:
     unique_anagrams = set()
     
     # Generate all possible substrings and their sorted signatures
-    for i in range(len(s)):
-        for j in range(i + 1, len(s) + 1):
+    for length in range(1, len(s) + 1):
+        for i in range(len(s) - length + 1):
             # Get the substring
-            substring = s[i:j]
+            substring = s[i:i+length]
             
             # Create a sorted signature of the substring
             # This identifies unique anagrams
