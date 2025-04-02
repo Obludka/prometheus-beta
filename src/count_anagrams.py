@@ -23,7 +23,7 @@ def count_anagrams(s: str) -> int:
         3
     """
     # Validate input
-    if not s or not s.islower():
+    if not s or not all(char.islower() for char in s):
         raise ValueError("Input must be a non-empty string of lowercase letters")
     
     # Set to store unique anagram signatures
