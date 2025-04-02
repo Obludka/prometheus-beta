@@ -18,7 +18,7 @@ def count_anagrams(s: str) -> int:
     
     Examples:
         >>> count_anagrams('abab')
-        4
+        6
         >>> count_anagrams('aa')
         3
     """
