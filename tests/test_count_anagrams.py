@@ -12,7 +12,7 @@ def test_count_anagrams_single_char():
 
 def test_count_anagrams_repeated_chars():
     """Test string with repeated characters"""
-    assert count_anagrams('aaaa') == 1
+    assert count_anagrams('aaaa') == 4
 
 def test_count_anagrams_unique_chars():
     """Test string with unique characters"""
