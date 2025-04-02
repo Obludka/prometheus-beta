@@ -30,7 +30,7 @@ def convert_to_alternating_header_case(input_string):
     if not input_string:
         return ""
     
-    # Split the string into words
+    # Split the string into words and strip extra whitespace
     words = input_string.lower().split()
     
     # Capitalize words at even indices (0-based)
