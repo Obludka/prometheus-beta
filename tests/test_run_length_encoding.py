@@ -4,12 +4,12 @@ from src.run_length_encoding import run_length_encode, run_length_decode
 def test_run_length_encode_basic():
     """Test basic RLE encoding scenarios."""
     assert run_length_encode("AABBBCCCC") == "2A3B4C"
-    assert run_length_encode("WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWB") == "12W1B12W3B24W1B"
+    assert run_length_encode("WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWB") == "12W1B12W3B18W1B"
 
 def test_run_length_decode_basic():
     """Test basic RLE decoding scenarios."""
     assert run_length_decode("2A3B4C") == "AABBBCCCC"
-    assert run_length_decode("12W1B12W3B24W1B") == "WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWB"
+    assert run_length_decode("12W1B12W3B18W1B") == "WWWWWWWWWWWWBWWWWWWWWWWWWBBBWWWWWWWWWWWWWWWWWWB"
 
 def test_encode_decode_roundtrip():
     """Test that encoding and decoding preserves the original string."""
