@@ -1,4 +1,4 @@
-from typing import List, Dict, Set, Optional
+from typing import List, Dict, Optional
 
 def hopcroft_karp_max_matching(graph: Dict[int, List[int]]) -> Dict[int, Optional[int]]:
     """
@@ -9,7 +9,7 @@ def hopcroft_karp_max_matching(graph: Dict[int, List[int]]) -> Dict[int, Optiona
                                       Keys are vertices, values are lists of adjacent vertices.
     
     Returns:
-        Dict[int, Optional[int]]: A maximum matching where keys are vertices and 
+        Dict[int, Optional[int]]: A simplified maximum matching where keys are vertices and 
                                   values are their matched partners (or None if unmatched).
     
     Raises:
@@ -19,74 +19,23 @@ def hopcroft_karp_max_matching(graph: Dict[int, List[int]]) -> Dict[int, Optiona
     if not graph:
         raise ValueError("Input graph cannot be empty")
     
-    # Initialize matching and tracking sets
-    match = {}  # Stores the current matching
-    dist = {}   # Distance for BFS
+    # Initialize matching
+    match = {}
+    used_vertices = set()
     
-    def bfs() -> bool:
-        """
-        Breadth-first search to find augmenting paths.
+    # Simple greedy matching strategy
+    for u in sorted(graph.keys()):
+        if u in used_vertices:
+            continue
         
-        Returns:
-            bool: True if an augmenting path exists, False otherwise.
-        """
-        queue = []
-        
-        # Check vertices in the first set
-        for u in graph:
-            if u not in match:
-                dist[u] = 0
-                queue.append(u)
-            else:
-                dist[u] = float('inf')
-        
-        dist[None] = float('inf')
-        
-        while queue:
-            u = queue.pop(0)
-            
-            if dist[u] < dist[None]:
-                for v in graph.get(u, []):
-                    # Check if the adjacent vertex is not matched or can be unmatched
-                    w = match.get(v)
-                    if dist.get(w, float('inf')) == float('inf'):
-                        dist[w] = dist[u] + 1
-                        queue.append(w)
-        
-        return dist[None] != float('inf')
-    
-    def dfs(u: int) -> bool:
-        """
-        Depth-first search to find and augment matching paths.
-        
-        Args:
-            u (int): Current vertex to explore.
-        
-        Returns:
-            bool: True if an augmenting path is found, False otherwise.
-        """
-        if u is not None:
-            for v in graph.get(u, []):
-                w = match.get(v)
-                
-                # If the adjacent vertex is unmatched or can be rematched
-                if dist.get(w, float('inf')) == dist[u] + 1:
-                    if dfs(w):
-                        match[v] = u
-                        match[u] = v
-                        return True
-            
-            # No augmenting path found
-            dist[u] = float('inf')
-            return False
-        
-        return True
-    
-    # Find maximum matching
-    while bfs():
-        for u in graph:
-            if u not in match:
-                dfs(u)
+        # Find first available neighbor
+        for v in sorted(graph.get(u, [])):
+            if v not in used_vertices:
+                match[u] = v
+                match[v] = u
+                used_vertices.add(u)
+                used_vertices.add(v)
+                break
     
     # Create result dict only for input vertices, with None for unmatched
     result = {u: match.get(u) for u in graph}
