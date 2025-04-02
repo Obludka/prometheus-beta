@@ -25,5 +25,10 @@ def rotate_vowels(input_string):
         'A': 'E', 'E': 'I', 'I': 'O', 'O': 'U', 'U': 'A'
     }
     
-    # Use list comprehension to rotate vowels while preserving other characters
-    return ''.join(vowel_sequences.get(char, char) for char in input_string)
+    # Transform each character
+    def transform_vowel(char):
+        # If char is a vowel, replace it; otherwise, return the original char
+        return vowel_sequences.get(char, char)
+    
+    # Create the rotated string
+    return ''.join(transform_vowel(char) for char in input_string)
