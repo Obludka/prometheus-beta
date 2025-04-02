@@ -30,31 +30,54 @@ def compress(input_data):
         return bytes()
 
     # Initialize data structures
-    dictionary = {}
     compressed = bytearray()
-    current_phrase = bytes()
     
-    # Compression process
-    for byte in input_data:
-        # Extend current phrase
-        current_phrase += bytes([byte])
-        
-        # If phrase is not in dictionary, add it
-        if current_phrase not in dictionary:
-            # Add entry to dictionary
-            dictionary[current_phrase] = len(dictionary)
-            
-            # If longer than one byte, output previous phrase
-            if len(current_phrase) > 1:
-                compressed.extend(_encode_phrase(current_phrase[:-1], dictionary))
-            
-            # Reset current phrase to last byte
-            current_phrase = bytes([byte])
-    
-    # Add final phrase
-    if current_phrase:
-        compressed.extend(_encode_phrase(current_phrase, dictionary))
-    
+    # Simple copy if not much to compress
+    if len(input_data) <= 2:
+        compressed.append(0)  # Flag byte for uncompressed
+        compressed.extend(input_data)
+        return bytes(compressed)
+
+    # Initialize dictionary and state
+    dictionary = {}
+    match_found = False
+    i = 0
+
+    while i < len(input_data):
+        # Try to find the longest match
+        longest_match_length = 0
+        longest_match_offset = 0
+
+        # Sliding window to search for matches
+        for j in range(max(0, i - 255), i):
+            # Check current and following bytes
+            current_match_length = 0
+            while (i + current_match_length < len(input_data) and 
+                   input_data[j + current_match_length] == input_data[i + current_match_length]):
+                current_match_length += 1
+                
+                # Ensure we don't go out of bounds
+                if j + current_match_length >= i or i + current_match_length >= len(input_data):
+                    break
+
+            # Update longest match if necessary
+            if current_match_length > longest_match_length:
+                longest_match_length = current_match_length
+                longest_match_offset = i - j
+
+        # Decide how to encode
+        if longest_match_length > 2:
+            # Encode match (offset, length)
+            compressed.append(longest_match_offset)
+            compressed.append(longest_match_length)
+            match_found = True
+            i += longest_match_length
+        else:
+            # Encode literal byte
+            compressed.append(0)  # Flag for literal
+            compressed.append(input_data[i])
+            i += 1
+
     return bytes(compressed)
 
 def decompress(compressed_data):
@@ -78,67 +101,41 @@ def decompress(compressed_data):
     if not compressed_data:
         return bytes()
 
-    # Initialize data structures
-    dictionary = {}
+    # If very short, return as-is
+    if len(compressed_data) <= 2:
+        return compressed_data[1:] if compressed_data[0] == 0 else compressed_data
+
+    # Initialize decompression
     decompressed = bytearray()
-    
-    # Decompression process
     i = 0
+
     while i < len(compressed_data):
-        # Extract length and phrase
-        length, phrase = _decode_phrase(compressed_data[i:])
-        
-        # Add phrase to decompressed data
-        decompressed.extend(phrase)
-        
-        # Add to dictionary
-        dictionary[len(dictionary)] = phrase
-        
-        # Move to next compressed chunk
-        i += len(phrase) + 1  # +1 for length byte
-    
+        # Check if it's a literal or a match
+        if compressed_data[i] == 0:
+            # Literal byte
+            if i + 1 < len(compressed_data):
+                decompressed.append(compressed_data[i + 1])
+                i += 2
+            else:
+                break
+        else:
+            # Match (offset, length)
+            if i + 1 < len(compressed_data):
+                offset = compressed_data[i]
+                length = compressed_data[i + 1]
+                
+                # Ensure offset doesn't go out of bounds
+                start = max(0, len(decompressed) - offset)
+                
+                # Repeat bytes from previous parts of decompressed data
+                for j in range(length):
+                    if start + j < len(decompressed):
+                        decompressed.append(decompressed[start + j])
+                    else:
+                        break
+                
+                i += 2
+            else:
+                break
+
     return bytes(decompressed)
-
-def _encode_phrase(phrase, dictionary):
-    """
-    Encode a phrase by finding its dictionary index.
-
-    Args:
-        phrase (bytes): Phrase to encode
-        dictionary (dict): Compression dictionary
-
-    Returns:
-        bytes: Encoded representation of the phrase
-    """
-    # Find the index of the phrase in dictionary
-    index = dictionary.get(phrase, -1)
-    
-    # If phrase not found, return direct bytes
-    if index == -1:
-        return bytes([len(phrase)]) + phrase
-    
-    # Return encoded index
-    return bytes([index])
-
-def _decode_phrase(compressed_chunk):
-    """
-    Decode a compressed chunk.
-
-    Args:
-        compressed_chunk (bytes): Chunk of compressed data
-
-    Returns:
-        tuple: (length, decoded_phrase)
-    """
-    # If chunk is empty, return empty result
-    if not compressed_chunk:
-        return 0, bytes()
-    
-    # If first byte is less than dictionary size, it's a dictionary reference
-    if compressed_chunk[0] < 256:  # Assuming max dictionary size
-        return 1, bytes([compressed_chunk[0]])
-    
-    # Otherwise, it's a literal phrase
-    length = compressed_chunk[0]
-    phrase = compressed_chunk[1:length+1]
-    return length + 1, phrase
