@@ -1,3 +1,5 @@
+import re
+
 def convert_to_dot_case(input_string: str) -> str:
     """
     Convert a given string to dot case.
@@ -30,11 +32,12 @@ def convert_to_dot_case(input_string: str) -> str:
     if not input_string:
         return ""
     
-    # Replace multiple types of word separators with a standard separator
-    normalized_string = input_string.replace('_', ' ').replace('-', ' ')
+    # Use regex to split camelCase and PascalCase 
+    # Replace non-alphanumeric characters with spaces first
+    normalized_string = re.sub(r'[^a-zA-Z0-9]', ' ', input_string)
     
-    # Split the string, converting to lowercase and joining with dots
-    return '.'.join(
-        word.lower() for word in normalized_string.split() 
-        if word.strip()  # Ignore empty words
-    )
+    # Split camelCase or PascalCase
+    words = re.findall(r'[A-Z]?[a-z]+|[A-Z]+(?=[A-Z][a-z]|\d|\W|$)|\d+', normalized_string)
+    
+    # Convert to lowercase and join with dots
+    return '.'.join(word.lower() for word in words)
