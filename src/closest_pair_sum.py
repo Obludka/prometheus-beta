@@ -35,6 +35,7 @@ def find_closest_pair_sum(arr, target):
     # Initialize variables to track closest pair
     closest_diff = float('inf')
     closest_pair = None
+    first_occurrence = True
     
     # Nested loops to check all possible pairs
     for i in range(len(arr)):
@@ -42,9 +43,12 @@ def find_closest_pair_sum(arr, target):
             current_sum = arr[i] + arr[j]
             current_diff = abs(current_sum - target)
             
-            # Update if this pair is closer to target or first occurrence of equal closeness
-            if current_diff < closest_diff or (current_diff == closest_diff and closest_pair is None):
+            # Update if this pair is closer to target 
+            # Or the first occurrence of equally close pairs
+            if (current_diff < closest_diff or 
+                (current_diff == closest_diff and first_occurrence)):
                 closest_diff = current_diff
                 closest_pair = (arr[i], arr[j])
+                first_occurrence = False
     
     return closest_pair
