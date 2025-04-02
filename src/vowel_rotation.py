@@ -20,15 +20,15 @@ def rotate_vowels(input_string):
         "xyz"
     """
     # Define vowel sequences (lowercase and uppercase)
-    vowel_sequences = {
-        'a': 'e', 'e': 'i', 'i': 'o', 'o': 'u', 'u': 'a',
-        'A': 'E', 'E': 'I', 'I': 'O', 'O': 'U', 'U': 'A'
+    vowel_map = {
+        'a': 'o', 'e': 'u', 'i': 'o', 'o': 'u', 'u': 'a',
+        'A': 'O', 'E': 'U', 'I': 'O', 'O': 'U', 'U': 'A'
     }
     
     # Transform each character
     def transform_vowel(char):
         # If char is a vowel, replace it; otherwise, return the original char
-        return vowel_sequences.get(char, char)
+        return vowel_map.get(char, char)
     
     # Create the rotated string
     return ''.join(transform_vowel(char) for char in input_string)
