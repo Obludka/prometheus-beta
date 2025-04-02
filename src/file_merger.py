@@ -8,7 +8,7 @@ into a single output file, with options for handling file contents.
 import os
 
 
-def merge_files(input_files, output_file, separator='\n'):
+def merge_files(input_files, output_file, separator=''):
     """
     Merge contents of multiple files into a single output file.
 
@@ -16,7 +16,7 @@ def merge_files(input_files, output_file, separator='\n'):
         input_files (list): List of paths to input files to be merged.
         output_file (str): Path to the output merged file.
         separator (str, optional): String to use between file contents. 
-                                   Defaults to newline.
+                                   Defaults to empty string.
 
     Raises:
         ValueError: If input_files is empty or contains non-existent files.
