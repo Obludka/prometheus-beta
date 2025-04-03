@@ -37,6 +37,8 @@ def sum_subarrays(arr, k):
         current_sum = 0
         for length in range(1, min(k + 1, n - start + 1)):
             current_sum += arr[start + length - 1]
-            total_sum += current_sum
+            # Only add the current_sum if the length is less than or equal to k
+            if length <= k:
+                total_sum += current_sum
     
     return total_sum
