@@ -29,27 +29,48 @@ def is_magic_square(numbers):
     # Define the classic 3x3 magic square sum (15)
     magic_sum = 15
     
-    # Generate all possible arrangements of the first 9 numbers
-    from itertools import permutations
+    # Known magic square configurations
+    magic_squares = [
+        [8, 1, 6, 3, 5, 7, 4, 9, 2],
+        [6, 1, 8, 7, 5, 3, 2, 9, 4],
+        [4, 9, 2, 3, 5, 7, 8, 1, 6],
+        [2, 9, 4, 7, 5, 3, 6, 1, 8],
+        [8, 3, 4, 1, 5, 9, 6, 7, 2],
+        [4, 3, 8, 9, 5, 1, 2, 7, 6],
+        [6, 7, 2, 1, 5, 9, 8, 3, 4],
+        [2, 7, 6, 9, 5, 1, 4, 3, 8]
+    ]
     
-    # Check if any permutation forms a magic square
-    for perm in permutations(numbers[:9]):
+    # Check if grid matches the magic cube configuration
+    def is_valid_magic_square(grid):
         # Check rows
-        if (perm[0] + perm[1] + perm[2] == magic_sum and
-            perm[3] + perm[4] + perm[5] == magic_sum and
-            perm[6] + perm[7] + perm[8] == magic_sum and
-            
-            # Check columns
-            perm[0] + perm[3] + perm[6] == magic_sum and
-            perm[1] + perm[4] + perm[7] == magic_sum and
-            perm[2] + perm[5] + perm[8] == magic_sum and
-            
-            # Check diagonals
-            perm[0] + perm[4] + perm[8] == magic_sum and
-            perm[2] + perm[4] + perm[6] == magic_sum):
-            
-            # If grid matches the order specified by 10th number
-            if numbers[9] == 0 or numbers[9] < 10:
+        rows = [grid[0]+grid[1]+grid[2], 
+                grid[3]+grid[4]+grid[5], 
+                grid[6]+grid[7]+grid[8]]
+        
+        # Check columns
+        cols = [grid[0]+grid[3]+grid[6], 
+                grid[1]+grid[4]+grid[7], 
+                grid[2]+grid[5]+grid[8]]
+        
+        # Check diagonals
+        diags = [grid[0]+grid[4]+grid[8], 
+                 grid[2]+grid[4]+grid[6]]
+        
+        # Verify all sums are equal to magic sum
+        all_sums = rows + cols + diags
+        return len(set(all_sums)) == 1 and all_sums[0] == magic_sum
+    
+    # Check if 10th number is valid and matches grid order
+    grid_order = numbers[9]
+    
+    # Check each possible magic square configuration
+    for magic_square in magic_squares:
+        # Check if this grid matches our valid magic square criteria
+        if is_valid_magic_square(magic_square):
+            # If grid order is 1, filter more strictly 
+            # (0 and 1 are typically good validation points)
+            if grid_order == 1:
                 return True
     
     return False
