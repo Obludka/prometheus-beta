@@ -20,11 +20,16 @@ def filter_unique_multiples(numbers):
     if not all(isinstance(x, int) for x in numbers):
         raise ValueError("All elements must be integers")
     
-    # Filter numbers that are multiples of 3 or 5, but not both
-    unique_multiples = [
-        num for num in numbers 
-        if (num % 3 == 0) != (num % 5 == 0)
-    ]
+    # Create a list to preserve the original order of filtering
+    filtered_order = []
+    # Set to efficiently track unique elements
+    seen = set()
     
-    # Return sorted list based on the order of appearance in the original list
-    return sorted(unique_multiples, key=lambda x: (numbers.index(x), x))
+    for num in numbers:
+        # Check if number is multiple of 3 or 5, but not both
+        unique_multiple = (num % 3 == 0) != (num % 5 == 0)
+        if unique_multiple and num not in seen:
+            filtered_order.append(num)
+            seen.add(num)
+    
+    return filtered_order
