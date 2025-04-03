@@ -26,5 +26,5 @@ def filter_unique_multiples(numbers):
         if (num % 3 == 0) != (num % 5 == 0)
     ]
     
-    # Return sorted list
-    return sorted(unique_multiples)
+    # Return sorted list based on the order of appearance in the original list
+    return sorted(unique_multiples, key=lambda x: (numbers.index(x), x))
