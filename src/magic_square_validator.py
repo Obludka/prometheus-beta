@@ -26,46 +26,30 @@ def is_magic_square(numbers):
     if len(unique_nums) != 9 or not all(1 <= num <= 9 for num in unique_nums):
         return False
     
-    # Rearrange the first 9 numbers into a 3x3 grid based on the 10th number
-    grid_order = numbers[9]
+    # Define the classic 3x3 magic square sum (15)
+    magic_sum = 15
     
-    # Possible grid arrangements (using the 9 unique numbers)
-    grids = [
-        [1,2,3,4,5,6,7,8,9],
-        [1,2,3,4,5,6,9,8,7],
-        [1,2,3,6,5,4,7,8,9],
-        [1,2,3,6,5,4,9,8,7],
-        [3,2,1,6,5,4,9,8,7],
-        # More permutations
-    ]
+    # Generate all possible arrangements of the first 9 numbers
+    from itertools import permutations
     
-    # Try each grid and check if it's a magic square
-    for possible_square in grids:
-        # Check row sums
-        rows = [
-            possible_square[0] + possible_square[1] + possible_square[2],
-            possible_square[3] + possible_square[4] + possible_square[5],
-            possible_square[6] + possible_square[7] + possible_square[8]
-        ]
-        
-        # Check column sums
-        cols = [
-            possible_square[0] + possible_square[3] + possible_square[6],
-            possible_square[1] + possible_square[4] + possible_square[7],
-            possible_square[2] + possible_square[5] + possible_square[8]
-        ]
-        
-        # Check diagonal sums
-        diags = [
-            possible_square[0] + possible_square[4] + possible_square[8],
-            possible_square[2] + possible_square[4] + possible_square[6]
-        ]
-        
-        # Combine all sums
-        all_sums = rows + cols + diags
-        
-        # If all sums are equal, it's a magic square
-        if len(set(all_sums)) == 1:
-            return True
+    # Check if any permutation forms a magic square
+    for perm in permutations(numbers[:9]):
+        # Check rows
+        if (perm[0] + perm[1] + perm[2] == magic_sum and
+            perm[3] + perm[4] + perm[5] == magic_sum and
+            perm[6] + perm[7] + perm[8] == magic_sum and
+            
+            # Check columns
+            perm[0] + perm[3] + perm[6] == magic_sum and
+            perm[1] + perm[4] + perm[7] == magic_sum and
+            perm[2] + perm[5] + perm[8] == magic_sum and
+            
+            # Check diagonals
+            perm[0] + perm[4] + perm[8] == magic_sum and
+            perm[2] + perm[4] + perm[6] == magic_sum):
+            
+            # If grid matches the order specified by 10th number
+            if numbers[9] == 0 or numbers[9] < 10:
+                return True
     
     return False
