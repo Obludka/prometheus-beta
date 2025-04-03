@@ -32,11 +32,11 @@ def sum_subarrays(arr, k):
     total_sum = 0
     n = len(arr)
     
-    # Calculate subarrays for various lengths and start points
+    # Cumulative sum tracking
     for start in range(n):
+        current_sum = 0
         for length in range(1, min(k + 1, n - start + 1)):
-            # Sum the subarray from start with given length
-            subarray_sum = sum(arr[start:start+length])
-            total_sum += subarray_sum
+            current_sum += arr[start + length - 1]
+            total_sum += current_sum
     
     return total_sum
