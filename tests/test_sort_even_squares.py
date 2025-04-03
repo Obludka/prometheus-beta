@@ -10,8 +10,8 @@ def test_sort_array_even_squares_all_odds():
     assert sort_array_even_squares([7, 3, 1, 5]) == [1, 3, 5, 7]
 
 def test_sort_array_even_squares_all_evens():
-    """Test case with only even numbers."""
-    assert sort_array_even_squares([2, 4, 6, 8]) == [4, 16, 36, 64]
+    """Test case with only even numbers, sorted squares in descending order."""
+    assert sort_array_even_squares([2, 4, 6, 8]) == [64, 36, 16, 4]
 
 def test_sort_array_even_squares_empty():
     """Test case with an empty list."""
