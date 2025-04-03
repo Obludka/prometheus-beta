@@ -35,38 +35,37 @@ def is_magic_square(numbers):
         [1,2,3,4,5,6,9,8,7],
         [1,2,3,6,5,4,7,8,9],
         [1,2,3,6,5,4,9,8,7],
-        # Add more permutations as needed
+        [3,2,1,6,5,4,9,8,7],
+        # More permutations
     ]
     
-    # Choose the grid based on the 10th number
-    if grid_order >= len(grids):
-        return False
+    # Try each grid and check if it's a magic square
+    for possible_square in grids:
+        # Check row sums
+        rows = [
+            possible_square[0] + possible_square[1] + possible_square[2],
+            possible_square[3] + possible_square[4] + possible_square[5],
+            possible_square[6] + possible_square[7] + possible_square[8]
+        ]
+        
+        # Check column sums
+        cols = [
+            possible_square[0] + possible_square[3] + possible_square[6],
+            possible_square[1] + possible_square[4] + possible_square[7],
+            possible_square[2] + possible_square[5] + possible_square[8]
+        ]
+        
+        # Check diagonal sums
+        diags = [
+            possible_square[0] + possible_square[4] + possible_square[8],
+            possible_square[2] + possible_square[4] + possible_square[6]
+        ]
+        
+        # Combine all sums
+        all_sums = rows + cols + diags
+        
+        # If all sums are equal, it's a magic square
+        if len(set(all_sums)) == 1:
+            return True
     
-    grid = grids[grid_order]
-    
-    # Reconstruct 3x3 square using the first 9 unique numbers
-    square = [grid[i] for i in range(9)]
-    
-    # Calculate row, column, and diagonal sums
-    rows = [
-        square[0] + square[1] + square[2],
-        square[3] + square[4] + square[5],
-        square[6] + square[7] + square[8]
-    ]
-    
-    cols = [
-        square[0] + square[3] + square[6],
-        square[1] + square[4] + square[7],
-        square[2] + square[5] + square[8]
-    ]
-    
-    diags = [
-        square[0] + square[4] + square[8],
-        square[2] + square[4] + square[6]
-    ]
-    
-    # Combine all sums
-    all_sums = rows + cols + diags
-    
-    # Check if all sums are equal
-    return len(set(all_sums)) == 1
+    return False
