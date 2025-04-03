@@ -22,7 +22,7 @@ def test_mixed_numbers():
     """Test an array with mixed positive and negative numbers."""
     arr = [2, -1, 3, 10, -4, 7, 2, -5]
     k = 3
-    assert max_subarray_sum(arr, k) == 19  # 3 + 10 + -4 or 10 + -4 + 7
+    assert max_subarray_sum(arr, k) == 13  # Actual max sum is 13 (3 + 10 + -4)
 
 def test_full_array_sum():
     """Test when k equals the length of the array."""
