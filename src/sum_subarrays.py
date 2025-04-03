@@ -32,13 +32,11 @@ def sum_subarrays(arr, k):
     total_sum = 0
     n = len(arr)
     
-    # Generate all subarrays of length <= k
+    # Calculate subarrays for various lengths and start points
     for start in range(n):
-        current_sum = 0
         for length in range(1, min(k + 1, n - start + 1)):
-            current_sum += arr[start + length - 1]
-            # Only add the current_sum if the length is less than or equal to k
-            if length <= k:
-                total_sum += current_sum
+            # Sum the subarray from start with given length
+            subarray_sum = sum(arr[start:start+length])
+            total_sum += subarray_sum
     
     return total_sum
